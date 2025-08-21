@@ -1,95 +1,73 @@
 (function() {
-  // Add CSS if not already present
+  // Ensure CSS is loaded once
   var cssHref = 'https://raw.githubusercontent.com/pabon510/weather-time-main/main/dark-navy-card.css';
-  if (!document.querySelector('link[href="' + cssHref + '"]')) {
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = cssHref;
-    document.head.appendChild(link);
+  function ensureCss() {
+    if (!document.querySelector('link[href="' + cssHref + '"]')) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = cssHref;
+      document.head.appendChild(link);
+    }
   }
 
-  // Create weather card container
-  var card = document.createElement('div');
-  card.className = 'wx-card';
-  card.setAttribute('role', 'group');
-  card.setAttribute('aria-label', 'Weather for Washington, D.C.');
-
-  //(function() {
-  // Add CSS if not already present
-  var cssHref = 'https://raw.githubusercontent.com/pabon510/weather-time-main/main/dark-navy-card.css';
-  if (!document.querySelector('link[href="' + cssHref + '"]')) {
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = cssHref;
-    document.head.appendChild(link);
+  // Define custom element class
+  class WeatherCard extends HTMLElement {
+    connectedCallback() {
+      ensureCss();
+      // Build the card markup
+      this.innerHTML = ''
+        + '<div class="wx-card">'
+        + '<div class="wx-header"><div class="wx-city">Washington, D.C.</div></div>'
+        + '<div class="wx-temp-row">'
+        + '<div><div class="wx-temp">23\u00b0C</div><div class="wx-condition">Few clouds</div></div>'
+        + '<img class="wx-icon" src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Few clouds">'
+        + '</div>'
+        + '<div class="wx-forecast">'
+        + '<div class="wx-row"><div class="wx-day">Friday</div><div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163634.png" alt="Few clouds" width="18" height="18">Few clouds</div><div class="wx-high">31\u00b0C</div></div>'
+        + '<div class="wx-row"><div class="wx-day">Saturday</div><div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Few clouds" width="18" height="18">Few clouds</div><div class="wx-high">30\u00b0C</div></div>'
+        + '<div class="wx-row"><div class="wx-day">Sunday</div><div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163623.png" alt="Few clouds" width="18" height="18">Few clouds</div><div class="wx-high">29\u00b0C</div></div>'
+        + '</div>'
+        + '</div>';
+    }
   }
 
-  // Create weather card container
-  var card = document.createElement('div');
-  card.className = 'wx-card';
-  card.setAttribute('role', 'group');
-  card.setAttribute('aria-label', 'Weather for Washington, D.C.');
+  // Register custom element if not already defined
+  if (!customElements.get('weather-card')) {
+    customElements.define('weather-card', WeatherCard);
+  }
 
-  // Build inner HTML for the card
-  card.innerHTML =
-    '<div class="wx-header"><div class="wx-city">Washington, D.C.</div></div>' +
-    '<div class="wx-temp-row">' +
-      '<div>' +
-        '<div class="wx-temp">23\u00b0C</div>' +
-        '<div class="wx-condition">Few clouds</div>' +
-      '</div>' +
-      '<img class="wx-icon" src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Few clouds">' +
-    '</div>' +
-    '<div class="wx-forecast">' +
-      '<div class="wx-row">' +
-        '<div class="wx-day">Friday</div>' +
-        '<div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Cloudy" width="18" height="18"> Few clouds</div>' +
-        '<div class="wx-high">31\u00b0C</div>' +
-      '</div>' +
-      '<div class="wx-row">' +
-        '<div class="wx-day">Saturday</div>' +
-        '<div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163642.png" alt="Cloudy" width="18" height="18"> Few clouds</div>' +
-        '<div class="wx-high">32\u00b0C</div>' +
-      '</div>' +
-      '<div class="wx-row">' +
-        '<div class="wx-day">Sunday</div>' +
-        '<div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Cloudy" width="18" height="18"> Few clouds</div>' +
-        '<div class="wx-high">31\u00b0C</div>' +
-      '</div>' +
-    '</div>';
+  // Factory function used by Staffbase to mount the widget
+  function factory(el) {
+    var card = document.createElement('weather-card');
+    el.appendChild(card);
+  }
 
-  // Insert the card into the page just before this script tag
-  var scriptTag = document.currentScript;
-  scriptTag.parentNode.insertBefore(card, scriptTag);
-})(); Build inner HTML for the card
-  card.innerHTML =
-    '<div class="wx-header"><div class="wx-city">Washington, D.C.</div></div>' +
-    '<div class="wx-temp-row">' +
-      '<div>' +
-        '<div class="wx-temp">23\u00b0C</div>' +
-        '<div class="wx-condition">Few clouds</div>' +
-      '</div>' +
-      '<img class="wx-icon" src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Few clouds">' +
-    '</div>' +
-    '<div class="wx-forecast">' +
-      '<div class="wx-row">' +
-        '<div class="wx-day">Friday</div>' +
-        '<div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Cloudy" width="18" height="18"> Few clouds</div>' +
-        '<div class="wx-high">31\u00b0C</div>' +
-      '</div>' +
-      '<div class="wx-row">' +
-        '<div class="wx-day">Saturday</div>' +
-        '<div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163642.png" alt="Cloudy" width="18" height="18"> Few clouds</div>' +
-        '<div class="wx-high">32\u00b0C</div>' +
-      '</div>' +
-      '<div class="wx-row">' +
-        '<div class="wx-day">Sunday</div>' +
-        '<div class="wx-small"><img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Cloudy" width="18" height="18"> Few clouds</div>' +
-        '<div class="wx-high">31\u00b0C</div>' +
-      '</div>' +
-    '</div>';
+  // Define the block definition used by Staffbase
+  var blockDefinition = {
+    name: 'weather-card',
+    factory: function(context) {
+      return factory;
+    },
+    attributes: {}
+  };
 
-  // Insert the card into the page just before this script tag
-  var scriptTag = document.currentScript;
-  scriptTag.parentNode.insertBefore(card, scriptTag);
+  // Define the external block definition with metadata
+  var externalBlockDefinition = {
+    name: 'Weather Card',
+    translations: {
+      en: {
+        title: 'Weather Card',
+        description: 'Displays a static weather card with forecast.'
+      }
+    },
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/869/869869.png'
+  };
+
+  if (window.defineBlock) {
+    window.defineBlock(blockDefinition, externalBlockDefinition);
+  } else {
+    // Render automatically if not in Staffbase environment
+    var container = document.currentScript && document.currentScript.parentElement ? document.currentScript.parentElement : document.body;
+    factory(container);
+  }
 })();
