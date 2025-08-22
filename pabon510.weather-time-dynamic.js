@@ -77,6 +77,9 @@
         // Build the card markup without date/time. We intentionally omit the wx-date element to avoid showing the date and time.
         const html = `<div class="wx-card" role="group" aria-label="Weather for ${locationName}"><div class="wx-header"><div class="wx-city">${locationName}</div></div><div class="wx-temp-row"><div><div class="wx-temp">${currentTempF}°F</div><div class="wx-condition">${condition}</div></div><img class="wx-icon" src="${current && current.condition ? current.condition.icon : ''}" alt="${condition}"/></div><div class="wx-forecast" aria-label="4 day forecast">${forecastHtml}</div></div>`;
         this.container.innerHTML = html;
+        // Remove filter on large weather icon so it retains original colors.
+        const bigIcon = this.container.querySelector('.wx-icon');
+        if (bigIcon) bigIcon.style.filter = 'none';
         const cityDiv = this.container.querySelector('.wx-city');
         if (cityDiv) {
           cityDiv.addEventListener('click', () => {
@@ -134,6 +137,9 @@
           });
           // Build fallback markup without date/time. Omit the wx-date element entirely to avoid showing the date and time.
           container.innerHTML = `<div class=\"wx-card\"><div class=\"wx-header\"><div class=\"wx-city\">${data.location.name}</div></div><div class=\"wx-temp-row\"><div><div class=\"wx-temp\">${currentTempF}°F</div><div class=\"wx-condition\">${condition}</div></div><img class=\"wx-icon\" src=\"${data.current.condition.icon}\" alt=\"${condition}\"/></div><div class=\"wx-forecast\">${forecastHtml}</div></div>`;
+          // Remove filter on the large icon for fallback rendering.
+          const iconEl = container.querySelector('.wx-icon');
+          if (iconEl) iconEl.style.filter = 'none';
         }).catch(err => { container.innerHTML = '<div class="wx-card">Error</div>'; });
       }
     })();
