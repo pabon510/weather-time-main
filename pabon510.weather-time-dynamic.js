@@ -97,16 +97,30 @@
         // across the available space rather than staying at a fixed width.
         const cardEl = this.container.querySelector('.wx-card');
               if (cardEl) {
-                // Remove CSS constraints on the error card so it spans the
-                // entire available width. Similar to the success path, we
-                // override width, maxWidth and minWidth to eliminate the
-                // original min/max width restrictions.
+                // Remove CSS constraints on the card so it spans the entire
+                // available width. Override width, maxWidth and minWidth to
+                // eliminate the original min/max width restrictions.
                 cardEl.style.width = '100%';
                 cardEl.style.maxWidth = '100%';
                 cardEl.style.minWidth = '100%';
                 cardEl.style.display = 'block';
                 cardEl.style.boxSizing = 'border-box';
               }
+        // Align forecast rows consistently across columns. Using a CSS grid
+        // ensures the day, condition, and high temperature columns line up
+        // across all rows. Applying these styles programmatically avoids
+        // modifying the static CSS string.
+        const rows = this.container.querySelectorAll('.wx-row');
+        rows.forEach(row => {
+          row.style.display = 'grid';
+          row.style.gridTemplateColumns = 'auto 1fr auto';
+          row.style.alignItems = 'center';
+        });
+        // Align the high temperature column to the right for consistency.
+        const highs = this.container.querySelectorAll('.wx-high');
+        highs.forEach(highEl => {
+          highEl.style.textAlign = 'right';
+        });
         const cityDiv = this.container.querySelector('.wx-city');
         if (cityDiv) {
           cityDiv.addEventListener('click', () => {
@@ -194,6 +208,18 @@
                   cardEl2.style.display = 'block';
                   cardEl2.style.boxSizing = 'border-box';
                 }
+                // Align forecast rows consistently across columns in fallback mode.
+                const rows2 = container.querySelectorAll('.wx-row');
+                rows2.forEach(row => {
+                  row.style.display = 'grid';
+                  row.style.gridTemplateColumns = 'auto 1fr auto';
+                  row.style.alignItems = 'center';
+                });
+                // Align the high temperature column to the right in fallback mode.
+                const highs2 = container.querySelectorAll('.wx-high');
+                highs2.forEach(highEl => {
+                  highEl.style.textAlign = 'right';
+                });
         }).catch(err => {
           container.innerHTML = '<div class="wx-card">Error</div>';
           // Ensure the error card fills the container width.
