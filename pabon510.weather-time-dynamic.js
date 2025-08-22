@@ -54,11 +54,16 @@
           this.container.innerHTML = `<div class=\"wx-card\"><div>${msg}</div></div>`;
           // Expand the error card to fill the width of its parent.
           const cardEl = this.container.querySelector('.wx-card');
-          if (cardEl) {
-            cardEl.style.width = '100%';
-            cardEl.style.display = 'block';
-            cardEl.style.boxSizing = 'border-box';
-          }
+            if (cardEl) {
+              // Force the card to consume the full width of its parent. We set
+              // width, minWidth and maxWidth so that the original CSS constraints
+              // (which specify min-width and max-width) do not limit the size.
+              cardEl.style.width = '100%';
+              cardEl.style.maxWidth = '100%';
+              cardEl.style.minWidth = '100%';
+              cardEl.style.display = 'block';
+              cardEl.style.boxSizing = 'border-box';
+            }
         }
       }
       renderWeather(data) {
@@ -91,11 +96,17 @@
         // setting width to 100% and display to block, the card will stretch
         // across the available space rather than staying at a fixed width.
         const cardEl = this.container.querySelector('.wx-card');
-        if (cardEl) {
-          cardEl.style.width = '100%';
-          cardEl.style.display = 'block';
-          cardEl.style.boxSizing = 'border-box';
-        }
+              if (cardEl) {
+                // Remove CSS constraints on the error card so it spans the
+                // entire available width. Similar to the success path, we
+                // override width, maxWidth and minWidth to eliminate the
+                // original min/max width restrictions.
+                cardEl.style.width = '100%';
+                cardEl.style.maxWidth = '100%';
+                cardEl.style.minWidth = '100%';
+                cardEl.style.display = 'block';
+                cardEl.style.boxSizing = 'border-box';
+              }
         const cityDiv = this.container.querySelector('.wx-city');
         if (cityDiv) {
           cityDiv.addEventListener('click', () => {
@@ -175,20 +186,27 @@
           if (iconEl) iconEl.style.filter = 'none';
           // Ensure the fallback card takes up the full width of its parent.
           const cardEl2 = container.querySelector('.wx-card');
-          if (cardEl2) {
-            cardEl2.style.width = '100%';
-            cardEl2.style.display = 'block';
-            cardEl2.style.boxSizing = 'border-box';
-          }
+                if (cardEl2) {
+                  // Ensure the fallback card spans the full width of its parent.
+                  cardEl2.style.width = '100%';
+                  cardEl2.style.maxWidth = '100%';
+                  cardEl2.style.minWidth = '100%';
+                  cardEl2.style.display = 'block';
+                  cardEl2.style.boxSizing = 'border-box';
+                }
         }).catch(err => {
           container.innerHTML = '<div class="wx-card">Error</div>';
           // Ensure the error card fills the container width.
           const errorCard2 = container.querySelector('.wx-card');
-          if (errorCard2) {
-            errorCard2.style.width = '100%';
-            errorCard2.style.display = 'block';
-            errorCard2.style.boxSizing = 'border-box';
-          }
+               if (errorCard2) {
+                 // Force the error card in fallback to occupy the full width of
+                 // its container by overriding width, maxWidth and minWidth.
+                 errorCard2.style.width = '100%';
+                 errorCard2.style.maxWidth = '100%';
+                 errorCard2.style.minWidth = '100%';
+                 errorCard2.style.display = 'block';
+                 errorCard2.style.boxSizing = 'border-box';
+               }
         });
       }
     })();
