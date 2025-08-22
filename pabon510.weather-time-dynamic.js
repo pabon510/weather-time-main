@@ -51,7 +51,14 @@
       renderError(msg) {
         ensureCss();
         if (this.container) {
-          this.container.innerHTML = `<div class="wx-card"><div>${msg}</div></div>`;
+          this.container.innerHTML = `<div class=\"wx-card\"><div>${msg}</div></div>`;
+          // Expand the error card to fill the width of its parent.
+          const cardEl = this.container.querySelector('.wx-card');
+          if (cardEl) {
+            cardEl.style.width = '100%';
+            cardEl.style.display = 'block';
+            cardEl.style.boxSizing = 'border-box';
+          }
         }
       }
       renderWeather(data) {
@@ -80,6 +87,15 @@
         // Remove filter on large weather icon so it retains original colors.
         const bigIcon = this.container.querySelector('.wx-icon');
         if (bigIcon) bigIcon.style.filter = 'none';
+        // Ensure the card uses the full width of its parent container. By
+        // setting width to 100% and display to block, the card will stretch
+        // across the available space rather than staying at a fixed width.
+        const cardEl = this.container.querySelector('.wx-card');
+        if (cardEl) {
+          cardEl.style.width = '100%';
+          cardEl.style.display = 'block';
+          cardEl.style.boxSizing = 'border-box';
+        }
         const cityDiv = this.container.querySelector('.wx-city');
         if (cityDiv) {
           cityDiv.addEventListener('click', () => {
@@ -128,7 +144,17 @@
     const widget = new (class {
       constructor() { this.container = container; }
       fetchWeather(city) {
-        if (!apiKey) { container.innerHTML = '<div class="wx-card">Missing API key</div>'; return; }
+        if (!apiKey) {
+          container.innerHTML = '<div class="wx-card">Missing API key</div>';
+          // Make the missing-API-key card take up the full width of its container.
+          const errorCard = container.querySelector('.wx-card');
+          if (errorCard) {
+            errorCard.style.width = '100%';
+            errorCard.style.display = 'block';
+            errorCard.style.boxSizing = 'border-box';
+          }
+          return;
+        }
         const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&days=4&aqi=no&alerts=no`;
         fetch(url).then(res => res.json()).then(data => {
           const currentTempF = Math.round(data.current.temp_f);
@@ -147,7 +173,23 @@
           // Remove filter on the large icon for fallback rendering.
           const iconEl = container.querySelector('.wx-icon');
           if (iconEl) iconEl.style.filter = 'none';
-        }).catch(err => { container.innerHTML = '<div class="wx-card">Error</div>'; });
+          // Ensure the fallback card takes up the full width of its parent.
+          const cardEl2 = container.querySelector('.wx-card');
+          if (cardEl2) {
+            cardEl2.style.width = '100%';
+            cardEl2.style.display = 'block';
+            cardEl2.style.boxSizing = 'border-box';
+          }
+        }).catch(err => {
+          container.innerHTML = '<div class="wx-card">Error</div>';
+          // Ensure the error card fills the container width.
+          const errorCard2 = container.querySelector('.wx-card');
+          if (errorCard2) {
+            errorCard2.style.width = '100%';
+            errorCard2.style.display = 'block';
+            errorCard2.style.boxSizing = 'border-box';
+          }
+        });
       }
     })();
     widget.fetchWeather(city);
