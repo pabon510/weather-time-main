@@ -74,7 +74,8 @@
           const highF = Math.round(day.day.maxtemp_f);
           forecastHtml += `<div class="wx-row"><div class="wx-day">${dayName}</div><div class="wx-small" aria-label="${conditionText}"><img src="${icon}" alt="${conditionText}" width="18" height="18"/> ${conditionText}</div><div class="wx-high">${highF}°F</div></div>`;
         }
-        const html = `<div class="wx-card" role="group" aria-label="Weather for ${locationName}"><div class="wx-header"><div class="wx-city">${locationName}</div></div><div class="wx-temp-row"><div><div class="wx-temp">${currentTempF}°F</div><div class="wx-condition">${condition}</div><div class="wx-date">${dtParts.date}, ${dtParts.time}</div></div><img class="wx-icon" src="${current && current.condition ? current.condition.icon : ''}" alt="${condition}"/></div><div class="wx-forecast" aria-label="4 day forecast">${forecastHtml}</div></div>`;
+        // Build the card markup without date/time. We intentionally omit the wx-date element to avoid showing the date and time.
+        const html = `<div class="wx-card" role="group" aria-label="Weather for ${locationName}"><div class="wx-header"><div class="wx-city">${locationName}</div></div><div class="wx-temp-row"><div><div class="wx-temp">${currentTempF}°F</div><div class="wx-condition">${condition}</div></div><img class="wx-icon" src="${current && current.condition ? current.condition.icon : ''}" alt="${condition}"/></div><div class="wx-forecast" aria-label="4 day forecast">${forecastHtml}</div></div>`;
         this.container.innerHTML = html;
         const cityDiv = this.container.querySelector('.wx-city');
         if (cityDiv) {
@@ -131,7 +132,8 @@
             const highF = Math.round(day.day.maxtemp_f);
             forecastHtml += `<div class=\"wx-row\"><div class=\"wx-day\">${dayName}</div><div class=\"wx-small\"><img src=\"${day.day.condition.icon}\" alt=\"${day.day.condition.text}\" width=\"18\" height=\"18\"/> ${day.day.condition.text}</div><div class=\"wx-high\">${highF}°F</div></div>`;
           });
-          container.innerHTML = `<div class=\"wx-card\"><div class=\"wx-header\"><div class=\"wx-city\">${data.location.name}</div></div><div class=\"wx-temp-row\"><div><div class=\"wx-temp\">${currentTempF}°F</div><div class=\"wx-condition\">${condition}</div><div class=\"wx-date\">${dtParts.date}, ${dtParts.time}</div></div><img class=\"wx-icon\" src=\"${data.current.condition.icon}\" alt=\"${condition}\"/></div><div class=\"wx-forecast\">${forecastHtml}</div></div>`;
+          // Build fallback markup without date/time. Omit the wx-date element entirely to avoid showing the date and time.
+          container.innerHTML = `<div class=\"wx-card\"><div class=\"wx-header\"><div class=\"wx-city\">${data.location.name}</div></div><div class=\"wx-temp-row\"><div><div class=\"wx-temp\">${currentTempF}°F</div><div class=\"wx-condition\">${condition}</div></div><img class=\"wx-icon\" src=\"${data.current.condition.icon}\" alt=\"${condition}\"/></div><div class=\"wx-forecast\">${forecastHtml}</div></div>`;
         }).catch(err => { container.innerHTML = '<div class="wx-card">Error</div>'; });
       }
     })();
