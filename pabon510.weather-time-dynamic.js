@@ -106,20 +106,26 @@
                 cardEl.style.display = 'block';
                 cardEl.style.boxSizing = 'border-box';
               }
-        // Align forecast rows consistently across columns. Using a CSS grid
-        // ensures the day, condition, and high temperature columns line up
-        // across all rows. Applying these styles programmatically avoids
-        // modifying the static CSS string.
+        // Align forecast rows consistently across columns. Instead of relying
+        // on the default flex distribution (which can vary depending on
+        // content width), explicitly set flex values for each child so that
+        // the day, condition and high temperature columns align across all
+        // rows. The day and high columns each take equal space, while the
+        // middle column grows to fill the remaining width.
         const rows = this.container.querySelectorAll('.wx-row');
         rows.forEach(row => {
-          row.style.display = 'grid';
-          row.style.gridTemplateColumns = 'auto 1fr auto';
+          row.style.display = 'flex';
+          row.style.justifyContent = 'space-between';
           row.style.alignItems = 'center';
-        });
-        // Align the high temperature column to the right for consistency.
-        const highs = this.container.querySelectorAll('.wx-high');
-        highs.forEach(highEl => {
-          highEl.style.textAlign = 'right';
+          const dayEl = row.querySelector('.wx-day');
+          const smallEl = row.querySelector('.wx-small');
+          const highEl = row.querySelector('.wx-high');
+          if (dayEl) dayEl.style.flex = '1';
+          if (smallEl) smallEl.style.flex = '2';
+          if (highEl) {
+            highEl.style.flex = '1';
+            highEl.style.textAlign = 'right';
+          }
         });
         const cityDiv = this.container.querySelector('.wx-city');
         if (cityDiv) {
@@ -208,17 +214,22 @@
                   cardEl2.style.display = 'block';
                   cardEl2.style.boxSizing = 'border-box';
                 }
-                // Align forecast rows consistently across columns in fallback mode.
+                // Align forecast rows consistently across columns in fallback mode
+                // by explicitly setting flex values on each child of the row.
                 const rows2 = container.querySelectorAll('.wx-row');
                 rows2.forEach(row => {
-                  row.style.display = 'grid';
-                  row.style.gridTemplateColumns = 'auto 1fr auto';
+                  row.style.display = 'flex';
+                  row.style.justifyContent = 'space-between';
                   row.style.alignItems = 'center';
-                });
-                // Align the high temperature column to the right in fallback mode.
-                const highs2 = container.querySelectorAll('.wx-high');
-                highs2.forEach(highEl => {
-                  highEl.style.textAlign = 'right';
+                  const dayEl2 = row.querySelector('.wx-day');
+                  const smallEl2 = row.querySelector('.wx-small');
+                  const highEl2 = row.querySelector('.wx-high');
+                  if (dayEl2) dayEl2.style.flex = '1';
+                  if (smallEl2) smallEl2.style.flex = '2';
+                  if (highEl2) {
+                    highEl2.style.flex = '1';
+                    highEl2.style.textAlign = 'right';
+                  }
                 });
         }).catch(err => {
           container.innerHTML = '<div class="wx-card">Error</div>';
