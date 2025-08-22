@@ -106,26 +106,18 @@
                 cardEl.style.display = 'block';
                 cardEl.style.boxSizing = 'border-box';
               }
-        // Align forecast rows consistently across columns. Instead of relying
-        // on the default flex distribution (which can vary depending on
-        // content width), explicitly set flex values for each child so that
-        // the day, condition and high temperature columns align across all
-        // rows. The day and high columns each take equal space, while the
-        // middle column grows to fill the remaining width.
+        // Align forecast rows consistently across columns using CSS grid.
         const rows = this.container.querySelectorAll('.wx-row');
         rows.forEach(row => {
-          row.style.display = 'flex';
-          row.style.justifyContent = 'space-between';
+          // Use a three-column grid where the first and last columns have equal
+          // widths and the middle column expands to fill the remaining space.
+          row.style.display = 'grid';
+          row.style.gridTemplateColumns = '1fr 2fr 1fr';
           row.style.alignItems = 'center';
-          const dayEl = row.querySelector('.wx-day');
-          const smallEl = row.querySelector('.wx-small');
+          row.style.columnGap = '8px';
+          // Ensure the high temperature column is right-aligned.
           const highEl = row.querySelector('.wx-high');
-          if (dayEl) dayEl.style.flex = '1';
-          if (smallEl) smallEl.style.flex = '2';
-          if (highEl) {
-            highEl.style.flex = '1';
-            highEl.style.textAlign = 'right';
-          }
+          if (highEl) highEl.style.textAlign = 'right';
         });
         const cityDiv = this.container.querySelector('.wx-city');
         if (cityDiv) {
@@ -214,22 +206,17 @@
                   cardEl2.style.display = 'block';
                   cardEl2.style.boxSizing = 'border-box';
                 }
-                // Align forecast rows consistently across columns in fallback mode
-                // by explicitly setting flex values on each child of the row.
+                // Use a CSS grid layout for each forecast row in fallback mode. The grid
+                // ensures that the day, condition and high temperature columns are aligned
+                // consistently without relying on flex values that vary with content width.
                 const rows2 = container.querySelectorAll('.wx-row');
                 rows2.forEach(row => {
-                  row.style.display = 'flex';
-                  row.style.justifyContent = 'space-between';
+                  row.style.display = 'grid';
+                  row.style.gridTemplateColumns = '1fr 2fr 1fr';
                   row.style.alignItems = 'center';
-                  const dayEl2 = row.querySelector('.wx-day');
-                  const smallEl2 = row.querySelector('.wx-small');
+                  row.style.columnGap = '8px';
                   const highEl2 = row.querySelector('.wx-high');
-                  if (dayEl2) dayEl2.style.flex = '1';
-                  if (smallEl2) smallEl2.style.flex = '2';
-                  if (highEl2) {
-                    highEl2.style.flex = '1';
-                    highEl2.style.textAlign = 'right';
-                  }
+                  if (highEl2) highEl2.style.textAlign = 'right';
                 });
         }).catch(err => {
           container.innerHTML = '<div class="wx-card">Error</div>';
